@@ -7,6 +7,7 @@ const ClosingSection = () => {
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.3 });
   const [showConfetti, setShowConfetti] = useState(false);
   const [heartClicked, setHeartClicked] = useState(false);
+  const [showBigHeart, setShowBigHeart] = useState(false);
 
   useEffect(() => {
     if (isVisible) {
@@ -17,7 +18,13 @@ const ClosingSection = () => {
 
   const handleHeartClick = () => {
     setHeartClicked(true);
+    setShowBigHeart(true);
+    
+    // Reset heart clicked state
     setTimeout(() => setHeartClicked(false), 1000);
+    
+    // Hide big heart after animation
+    setTimeout(() => setShowBigHeart(false), 2000);
   };
 
   return (
@@ -25,6 +32,19 @@ const ClosingSection = () => {
       ref={ref} 
       className="min-h-screen flex items-center justify-center px-6 py-20 bg-gradient-to-br from-pink-100 via-purple-100 to-rose-100 relative overflow-hidden"
     >
+      {/* Big Heart Popup */}
+      {showBigHeart && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+          <Heart 
+            className="w-64 h-64 text-red-500 fill-current animate-bounce"
+            style={{
+              animation: 'heartPulse 2s ease-in-out',
+              filter: 'drop-shadow(0 0 20px rgba(239, 68, 68, 0.5))'
+            }}
+          />
+        </div>
+      )}
+
       {/* Confetti animation */}
       {showConfetti && (
         <div className="absolute inset-0 pointer-events-none">
